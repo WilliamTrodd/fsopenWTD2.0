@@ -14,7 +14,7 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(Array(7).fill(0))
   const max = points.indexOf(Math.max(...points))
-
+  
   const nextHandler = () => {
     const newVal = Math.floor(Math.random()*7)
     setSelected(newVal)
