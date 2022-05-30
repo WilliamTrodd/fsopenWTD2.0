@@ -3,12 +3,14 @@ import personsService from './services/persons'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
-
+import Notification from './components/Notification'
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterValue, setFilterValue] = useState('')
+  const [notifMessage, setNotifMessage] = useState(null)
+  const [notifType, setNotifType] = useState(null)
 
 
   useEffect(() => {
@@ -19,6 +21,13 @@ const App = () => {
       })
   }, [])
 
+  const resetNotif = () => {
+    setTimeout(() => {
+      setNotifMessage(null)
+      setNotifType(null)
+    },5000)
+  }
+
   const updateContact = (person) => {
     const changedPerson = { ...person, number: newNumber}
     personsService
@@ -27,16 +36,21 @@ const App = () => {
       setPersons(persons.map(person => person.id !== changedPerson.id ? person : returnedPerson))
       setNewName('')
       setNewNumber('')
+      setNotifMessage(`${changedPerson.name} has been updated`)
+      setNotifType('notification')
+      resetNotif()
     })
     .catch(error => {
-      alert('This person no longer exists.')
+      setNotifMessage(`${changedPerson.name} has already been removed from the server`)
+      setNotifType('error')
+      resetNotif()
     })
   }
 
   const addNew = (event) => {
     event.preventDefault()
     const contactDetail = { name: newName, 
-                            number: newNumber, 
+                            number: newNumber
                           }
 
     if (persons.map(person => person.name).includes(newName)){
@@ -52,6 +66,9 @@ const App = () => {
             setPersons(persons.concat(returnedContact))
             setNewName('')
             setNewNumber('')
+            setNotifMessage(`${contactDetail.name} was added`)
+            setNotifType('notification')
+            resetNotif()
           })
         setPersons(persons.concat(contactDetail))
         setNewName('')
@@ -66,6 +83,9 @@ const App = () => {
       .remove(id)
       .then(responsePersons => {
         setPersons(persons.filter(n => n.id != id))
+        setNotifMessage(`${personName} has been deleted`)
+        setNotifType('notification')
+        resetNotif()
       })
     }
   }
@@ -85,6 +105,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notifMessage} styleName={notifType} />
       <Filter filterValue={filterValue} handleFilterChange={handleFilterChange} />
       <h2>Add a new</h2>
       <PersonForm 
