@@ -70,7 +70,11 @@ const App = () => {
             setNotifType('notification')
             resetNotif()
           })
-        setPersons(persons.concat(contactDetail))
+          .catch(error => {
+            setNotifMessage(`${error.response.data.error}`)
+            setNotifType('error')
+            resetNotif()
+          })
         setNewName('')
         setNewNumber('')
       }
@@ -82,7 +86,7 @@ const App = () => {
       personsService
       .remove(id)
       .then(responsePersons => {
-        setPersons(persons.filter(n => n.id != id))
+        setPersons(persons.filter(n => n.id !== id))
         setNotifMessage(`${personName} has been deleted`)
         setNotifType('notification')
         resetNotif()
@@ -103,7 +107,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <>
       <h2>Phonebook</h2>
       <Notification message={notifMessage} styleName={notifType} />
       <Filter filterValue={filterValue} handleFilterChange={handleFilterChange} />
@@ -117,7 +121,7 @@ const App = () => {
       />
       <h2>Numbers</h2>
       <Persons persons={persons} filterValue={filterValue} removeContact={removeContact}/>
-    </div>
+    </>
   )
 }
 

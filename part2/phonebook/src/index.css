@@ -10,7 +10,7 @@
 
 .error {
     color: rgb(255, 0, 0);
-    background: gray;
+    background: rgb(36, 22, 22);
     font-size:20px;
     border-style: solid;
     border-radius: 5px;
