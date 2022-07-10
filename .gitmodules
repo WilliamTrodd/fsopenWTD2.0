@@ -1,0 +1,9 @@
+[submodule "fsopenWTDPart3"]
+	path = fsopenWTDPart3
+	url = https://github.com/WilliamTrodd/fsopenWTDPart3
+[submodule "FSOpenPart3Notes"]
+	path = FSOpenPart3Notes
+	url = https://github.com/WilliamTrodd/FSOpenPart3Notes
+[submodule "FSOpenPart4Notes"]
+	path = FSOpenPart4Notes
+	url = https://github.com/WilliamTrodd/FSOpenPart4Notes
