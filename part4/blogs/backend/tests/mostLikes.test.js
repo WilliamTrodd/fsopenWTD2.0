@@ -62,28 +62,22 @@ const longerList = [
   } 
 ]
 
-const emptyList = []
 
-describe('favourite blog', () => {
-  test('when list has only one blog', () => {
-    const result = listHelper.favoriteBlog(listWithOneBlog)
-    expect(result).toEqual({title: 'Go To Statement Considered Harmful',
-                            author: 'Edsger W. Dijkstra',
-                            likes: 5
-                          })
+describe('most likes when ', () => {
+  test('multiple blogs', () => {
+    const result = listHelper.mostLikes(longerList)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
   })
 
-  test('when list has many blogs', () => {
-    const result = listHelper.favoriteBlog(longerList)
-    expect(result).toEqual({title: "Canonical string reduction",
-                            author: "Edsger W. Dijkstra",
-                            likes: 12
-                          })
+  test('one blogs', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 5 })
   })
-
-  test('when list is empty', () => {
-    const result = listHelper.favoriteBlog(emptyList)
+  
+  test('no blogs', () => {
+    const result = listHelper.mostLikes({})
     expect(result).toEqual({})
   })
+  
 
 })
