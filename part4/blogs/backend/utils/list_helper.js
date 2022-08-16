@@ -50,8 +50,6 @@ const mostLikes = (blogs) => {
     .chain(blogs)
     .groupBy('author')
     .map((blogs, author) => {
-      console.log(blogs)
-      console.log(author)
       let likes = 0
       lodash.forEach(blogs, (blog) => {
         likes += blog['likes']
