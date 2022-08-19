@@ -67,7 +67,8 @@ const emptyList = []
 describe('favourite blog', () => {
   test('when list has only one blog', () => {
     const result = listHelper.favoriteBlog(listWithOneBlog)
-    expect(result).toEqual({ title: 'Go To Statement Considered Harmful',
+    expect(result).toEqual({
+      title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
       likes: 5
     })
@@ -75,7 +76,8 @@ describe('favourite blog', () => {
 
   test('when list has many blogs', () => {
     const result = listHelper.favoriteBlog(longerList)
-    expect(result).toEqual({ title: 'Canonical string reduction',
+    expect(result).toEqual({
+      title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
       likes: 12
     })

@@ -151,7 +151,7 @@ describe('users', () => {
     await user.save()
 
   })
-  test('adding a valid user', () => {
+  test('adding a valid user', async () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
@@ -161,11 +161,73 @@ describe('users', () => {
     }
 
     await api
-    .post('/api/users')
-    .send(newUSer)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length +1)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).toContain(newUser.username)
   })
+  test('adding a user with an existing username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: usersAtStart[0].username,
+      name: 'BobLoblaw',
+      password: 'Test123!'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+  test('adding a user with a password less than 3 chars', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'BlahBlah',
+      name: 'BobLoblaw',
+      password: 'ab'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+  test('adding a user with a username less than 3 chars', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'BL',
+      name: 'BobLoblaw',
+      password: 'abc123!!'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+
 })
 afterAll(() => {
   mongoose.connection.close()
