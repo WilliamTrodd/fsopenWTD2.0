@@ -58,7 +58,8 @@ Content-Type: application/json
   "title": "TDD harms architecture",
   "author": "Robert C. Martin",
   "url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-  "likes": 0
+  "likes": 0,
+  "user": "6302f2d569aa625930fe5590"
 }
 
 ###
@@ -71,3 +72,12 @@ Content-Type: application/json
   "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
   "likes": 2
 }  
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+ "name": "W Trodd",
+ "password": "newPass123"
+}
