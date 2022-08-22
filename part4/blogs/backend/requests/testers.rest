@@ -63,10 +63,11 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3003/api/blogs
+DELETE http://localhost:3003/api/blogs/6303403ab575493034870576
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlcuVHJvZGQiLCJpZCI6IjYzMDMzN2NiYjAzNjVhYTkxYzA3MTc5NyIsImlhdCI6MTY2MTE1NjQzMX0.E07fUF7AVugXfenmYrDlH9p_gWn6IFpZ11BQ0HD34LA
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlcuVHJvZGQiLCJpZCI6IjYzMDMzN2NiYjAzNjVhYTkxYzA3MTc5NyIsImlhdCI6MTY2MTE1ODQ0OX0.ep4t8e7gCWvKlPPjnQeWRzB9LYk-HZ8biiZgXXUnRu0
 
+###
 {
   "title": "Type wars",
   "author": "Robert C. Martin",
@@ -91,6 +92,15 @@ Content-Type: application/json
 {
   "username": "newUser",
   "name": "new name",
+  "password": "Testing123"
+}
+
+###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "newUser",
   "password": "Testing123"
 }
 
