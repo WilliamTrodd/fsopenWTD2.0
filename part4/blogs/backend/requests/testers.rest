@@ -80,8 +80,18 @@ Content-Type: application/json
 
 {
   "username": "W.Trodd",
- "name": "W Trodd",
- "password": "newPass123"
+  "name": "W Trodd",
+  "password": "newPass123"
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "newUser",
+  "name": "new name",
+  "password": "Testing123"
 }
 
 ###
