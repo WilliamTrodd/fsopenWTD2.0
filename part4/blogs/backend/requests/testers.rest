@@ -63,11 +63,15 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3003/api/blogs/6303403ab575493034870576
+DELETE http://localhost:3003/api/blogs/630348d8a23c61aa4ccbfff7
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlcuVHJvZGQiLCJpZCI6IjYzMDMzN2NiYjAzNjVhYTkxYzA3MTc5NyIsImlhdCI6MTY2MTE1ODQ0OX0.ep4t8e7gCWvKlPPjnQeWRzB9LYk-HZ8biiZgXXUnRu0
 
 ###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5ld1VzZXIiLCJpZCI6IjYzMDM0MmYxZDZhMTI2NThkMjRiODgwZiIsImlhdCI6MTY2MTMzMjg4M30.8LiAaWTmBRgMg-LFMuPXNn9C-zH5RJoEJjt_mfRnegc
+
 {
   "title": "Type wars",
   "author": "Robert C. Martin",
