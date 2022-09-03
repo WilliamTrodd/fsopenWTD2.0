@@ -8,7 +8,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  
   const [notifMessage, setNotifMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -50,6 +49,7 @@ const App = () => {
         notifier('blog not added', 'error')
       }
   }
+
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -126,7 +126,7 @@ const App = () => {
             <br/><BlogForm createBlog={createBlog}/><br/>
           </Togglable>
         {blogs.sort((a,b) => b.likes-a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} like/>
         )}
         </div>
       }
