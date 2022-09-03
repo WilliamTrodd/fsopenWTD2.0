@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -37,8 +38,10 @@ const App = () => {
       setNotifType(null)
     }, 5000)
   }
+  const blogFormRef = useRef()
 
   const createBlog = async (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     try{
         const returnedBlog = await blogService.create(blogObject)
         setBlogs(blogs.concat(returnedBlog))
@@ -78,7 +81,7 @@ const App = () => {
       notifier('Couldn\'t log out', 'error')
     }
   }
-  
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -119,7 +122,9 @@ const App = () => {
         loginForm() :
         <div>
           <p>{user.name} logged in</p>{logoutButton()}
-          <br/><BlogForm createBlog={createBlog}/><br/>
+          <Togglable buttonLabel = 'create new blog' ref={blogFormRef}>
+            <br/><BlogForm createBlog={createBlog}/><br/>
+          </Togglable>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
