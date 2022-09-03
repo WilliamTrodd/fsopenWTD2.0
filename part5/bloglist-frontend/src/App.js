@@ -51,14 +51,6 @@ const App = () => {
       }
   }
 
-  const likeBlog = async (blog) => {
-    const toUpdate = await blogs.find(target => target.id === blog.id)
-    const updated = { ...toUpdate, user: toUpdate.user.id, likes: toUpdate.likes+1}
-    console.log(updated)
-    blogService
-      .update(blog.id, updated)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -134,7 +126,7 @@ const App = () => {
             <br/><BlogForm createBlog={createBlog}/><br/>
           </Togglable>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+          <Blog key={blog.id} blog={blog} />
         )}
         </div>
       }
