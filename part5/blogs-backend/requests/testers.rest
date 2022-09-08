@@ -116,3 +116,23 @@ COntent-Type: application/json
   "username": "W.Trodd",
   "password": "newPass123"
 }
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5ld1VzZXIiLCJpZCI6IjYzMDM0MmYxZDZhMTI2NThkMjRiODgwZiIsImlhdCI6MTY2MTMzMjg4M30.8LiAaWTmBRgMg-LFMuPXNn9C-zH5RJoEJjt_mfRnegc
+
+{
+  "title": "Type wars",
+  "author": "Robert C. Martin",
+  "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+  "likes": 2
+}  
+
+### 
+PUT http://localhost:3003/api/blogs/63185075ac3fabbc3a3224f6
+Content-Type: application/json
+
+{
+  "likes": 4
+}

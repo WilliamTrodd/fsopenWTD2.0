@@ -80,7 +80,6 @@ describe('ALL blogs', () => {
 
       const users = await helper.usersInDb()
       const user = users[0]
-      console.log(user)
 
       const newBlog = {
         title: 'POST Blog',
@@ -140,7 +139,6 @@ describe('ALL blogs', () => {
     test('401 error if no token provided', async () => {
       const users = await helper.usersInDb()
       const user = users[0]
-      console.log(user)
 
       const newBlog = {
         title: 'POST Blog',
@@ -193,7 +191,6 @@ describe('ALL blogs', () => {
     test('deletion of a blog', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
-      console.log(authorization)
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)

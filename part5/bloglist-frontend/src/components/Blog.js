@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
-const Blog = ({blog}) => {
+const Blog = ({blog, addLike}) => {
   const [visible, setVisible] = useState(false)
+  const [blogObject, setBlogObject] = useState(blog)
 
   const blogStyle = {
     paddingTop: 10,
@@ -15,14 +16,20 @@ const Blog = ({blog}) => {
     setVisible(!visible)
   }
 
+  const likeHandler =  () => {
+    const updated = {...blog, likes: blog.likes+1}
+    addLike(blog.id, updated)
+    setBlogObject(updated)
+  }
+
   const blogView = () => {
     if (visible) {
       return (
         <div>
-          {blog.title} {blog.author} <button onClick={toggleVisible}>hide</button>
+          {blog.title} {blog.author} <button onClick={toggleVisible}>hide</button> <br/>
           {blog.url} <br/>
-          likes: {blog.likes} <button>like</button> <br/>
-          {blog.user? blog.user.name : ''}
+          likes: {blogObject.likes} <button onClick={() => likeHandler()}>like</button> <br/>
+          {blog.user.name}
         </div>)
      } else { 
        return(

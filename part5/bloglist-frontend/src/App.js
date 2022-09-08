@@ -50,6 +50,15 @@ const App = () => {
       }
   }
 
+  const addLike = async (id, blogToUpdate) => {
+    try{
+
+      const returnedBlog = await blogService.update(id, blogToUpdate)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+    } catch(exception) {
+      notifier(`Cannot update blog ${blogToUpdate.title}`, 'error')
+    }
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -126,7 +135,7 @@ const App = () => {
             <br/><BlogForm createBlog={createBlog}/><br/>
           </Togglable>
         {blogs.sort((a,b) => b.likes-a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} like/>
+          <Blog key={blog.id} blog={blog} addLike={addLike}/>
         )}
         </div>
       }
