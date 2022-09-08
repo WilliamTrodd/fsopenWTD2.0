@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import blogService from '../services/blogs'
+
 
 const Blog = ({blog, addLike}) => {
   const [visible, setVisible] = useState(false)
@@ -29,7 +31,7 @@ const Blog = ({blog, addLike}) => {
           {blog.title} {blog.author} <button onClick={toggleVisible}>hide</button> <br/>
           {blog.url} <br/>
           likes: {blogObject.likes} <button onClick={() => likeHandler()}>like</button> <br/>
-          {blog.user.name}
+          {blog.user.name} <button onClick={() => }
         </div>)
      } else { 
        return(

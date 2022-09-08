@@ -52,9 +52,8 @@ const App = () => {
 
   const addLike = async (id, blogToUpdate) => {
     try{
-
       const returnedBlog = await blogService.update(id, blogToUpdate)
-      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : {...blog, likes: blogToUpdate.likes}))
     } catch(exception) {
       notifier(`Cannot update blog ${blogToUpdate.title}`, 'error')
     }
