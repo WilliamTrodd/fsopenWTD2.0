@@ -50,6 +50,15 @@ const App = () => {
       }
   }
 
+  const deleteBlog = async (blogObject) => {
+    try{
+      blogService.remove(blogObject.id)
+      setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
+    } catch (exception) {
+      notifier(`Cannot remove blog ${blogObject.title}`, 'error')
+    }
+  }
+
   const addLike = async (id, blogToUpdate) => {
     try{
       const returnedBlog = await blogService.update(id, blogToUpdate)
@@ -134,7 +143,7 @@ const App = () => {
             <br/><BlogForm createBlog={createBlog}/><br/>
           </Togglable>
         {blogs.sort((a,b) => b.likes-a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} addLike={addLike}/>
+          <Blog key={blog.id} blog={blog} addLike={addLike} deleteBlog={deleteBlog} username={user.username}/>
         )}
         </div>
       }
