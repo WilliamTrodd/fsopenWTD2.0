@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Notification = ({message, styleName}) => {
+const Notification = ({ message, styleName }) => {
   if (message === null) {
     return null
   }
