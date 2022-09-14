@@ -30,7 +30,7 @@ const Blog = ({ blog, addLike, deleteBlog, username }) => {
   const blogView = () => {
     if (visible) {
       return (
-        <div>
+        <div className='blog'>
           {blog.title} {blog.author} <button onClick={toggleVisible}>hide</button> <br/>
           {blog.url} <br/>
           likes: {blogObject.likes} <button onClick={() => likeHandler()}>like</button> <br/>
@@ -39,7 +39,7 @@ const Blog = ({ blog, addLike, deleteBlog, username }) => {
         </div>)
     } else {
       return(
-        <div>
+        <div className='blog'>
           {blog.title} - {blog.author} <button onClick={toggleVisible}>view</button>
         </div>)
     }
