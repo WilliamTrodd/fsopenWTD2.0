@@ -77,7 +77,7 @@ const App = () => {
   }
 
   const logoutButton = () => (
-    <button onClick= {() => handleLogout()}>
+    <button onClick= {() => handleLogout()} id='logout-button'>
       logout
     </button>
   )
