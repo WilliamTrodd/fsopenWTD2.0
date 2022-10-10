@@ -3,3 +3,4 @@ part2/countries/countries/.env
 .DS_Store
 part2/countries/countries/.env
 part2/countries/countries/.env
+part6/redux-anecdotes/db.json
