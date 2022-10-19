@@ -5,3 +5,9 @@ part2/countries/countries/.env
 part2/countries/countries/.env
 part6/redux-anecdotes/db.json
 part6/redux-anecdotes/db.json
+node_modules/.bin/prettier
+/node_modules
+.env
+.gitignore
+.eslint*
+.git*
