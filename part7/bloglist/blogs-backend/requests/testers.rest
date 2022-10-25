@@ -76,7 +76,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5ld
   "title": "Type wars",
   "author": "Robert C. Martin",
   "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-  "likes": 2
+  "likes": 2,
+  "comments": []
 }  
 
 ###
@@ -126,7 +127,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5ld
   "title": "Type wars",
   "author": "Robert C. Martin",
   "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-  "likes": 2
+  "likes": 2,
+  "comments": ["here's one", "here's another"]
 }  
 
 ### 
@@ -135,4 +137,12 @@ Content-Type: application/json
 
 {
   "likes": 4
+}
+
+###
+PUT http://localhost:3003/api/blogs/63185075ac3fabbc3a3224f6
+Content-Type: application/json
+
+{
+  "comments": ["This is just a test comment"]
 }

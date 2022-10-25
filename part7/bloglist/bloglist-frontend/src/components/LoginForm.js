@@ -1,10 +1,16 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { setNotification } from '../reducers/notifReducer'
+import { login } from '../reducers/userReducer'
+import { useDispatch } from 'react-redux'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 
 
-const LoginForm = ({ setUser, notifier }) => {
+
+const LoginForm = () => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -20,45 +26,44 @@ const LoginForm = ({ setUser, notifier }) => {
         'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
-      notifier(`${username} successfully logged in`, 'notification')
-      setUser(user)
+      dispatch(setNotification(`${username} successfully logged in`, 'notification', 10))
+      dispatch(login(user))
       setUsername('')
       setPassword('')
     } catch (error) {
-      notifier('incorrect username or password','error')
+      dispatch(setNotification('incorrect username or password','error', 10))
     }
   }
 
   return(
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className="form" >
       <div>
-      username
-        <input
+        <TextField
+          label="Username"
+          fullWidth
+          margin="normal"
+          onChange={({ target }) => setUsername(target.value)}
           type="text"
           value={username}
           name="Username"
           id="username"
-          onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
-      password
-        <input
+        <TextField
+          margin="normal"
+          fullWidth
           type="password"
+          label="Password"
           value={password}
           name="Password"
           id="password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit" id="login-button">login</button>
+      <Button type="submit" id="login-button" variant="contained">login</Button>
     </form>
   )
-}
-
-LoginForm.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  notifier: PropTypes.func.isRequired
 }
 
 export default LoginForm

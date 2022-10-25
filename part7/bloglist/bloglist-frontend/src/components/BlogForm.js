@@ -1,63 +1,65 @@
-import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notifReducer'
+import { useNavigate } from 'react-router-dom'
+import { Box, Grid, TextField, Button } from '@mui/material'
 
-const BlogForm = ({ createBlog }) => {
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
-
-  const handleTitleChange = (event) => {
-    setBlogTitle(event.target.value)
-  }
-  const handleAuthorChange = (event) => {
-    setBlogAuthor(event.target.value)
-  }
-  const handleUrlChange = (event) => {
-    setBlogUrl(event.target.value)
-  }
+const BlogForm = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const addBlog = (event) => {
     event.preventDefault()
-    createBlog({
+    const blogTitle = event.target.blogtitle.value
+    const blogAuthor = event.target.blogauthor.value
+    const blogUrl = event.target.blogurl.value
+    dispatch(createBlog({
       title: blogTitle,
       author: blogAuthor,
       url: blogUrl
-    })
+    }))
+    navigate('/blogs')
+    dispatch(setNotification(`Blog: ${blogTitle} by ${blogAuthor} added`, 'notification' ,10))
 
-    setBlogAuthor('')
-    setBlogTitle('')
-    setBlogUrl('')
   }
 
   return (
-    <form onSubmit={addBlog}>
-    Blog Title:
-      <input
-        value={blogTitle}
-        onChange={handleTitleChange}
-        placeholder='Blog Title'
-        id='blog-title'
-      /><br/>
-    Blog Author:
-      <input
-        value={blogAuthor}
-        onChange={handleAuthorChange}
-        placeholder='Blog Author'
-        id='blog-author'
-      /><br/>
-    Blog Url:
-      <input
-        value={blogUrl}
-        onChange={handleUrlChange}
-        placeholder='Blog Url'
-        id='blog-url'
-      />
-      <button
-        type="submit"
-        id='blog-submit'
-      >
-      create
-      </button>
-    </form>
+    <Grid item xs={8} justify={'center'}>
+      <br/>
+      <form onSubmit={addBlog}>
+        <TextField
+          label="Blog Title"
+          fullWidth
+          margin="normal"
+          type="text"
+          id="blogtitle"
+          name="blogtitle"
+          placeholder="Title"/>
+        <TextField
+          label="Blog Author"
+          fullWidth
+          margin="normal"
+          type="text"
+          id="blogauthor"
+          name="blogauthor"
+          placeholder="Author"/>
+        <TextField
+          label="Blog Url"
+          fullWidth
+          margin="normal"
+          type="text"
+          id="blogurl"
+          name="blogurl"
+          placeholder="URL"/>
+        <Box textAlign="center">
+          <Button type="submit" id="blog-submit" sx={{ fontSize: 'large', height: '100%' }}>
+          Submit
+          </Button>
+        </Box>
+
+      </form>
+      <br/>
+    </Grid>
   )
 }
 

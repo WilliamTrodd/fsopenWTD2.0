@@ -18,7 +18,8 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: user._id
+    user: user._id,
+    comments: body.comments
   })
 
   const savedBlog = await blog.save()
@@ -65,7 +66,7 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const blog = request.body
   console.log(request.token)
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, { likes: blog.likes }, { new:true })
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, { likes: blog.likes, comments: blog.comments }, { new:true })
   response.json(updatedBlog.toJSON())
 })
 module.exports = blogsRouter
