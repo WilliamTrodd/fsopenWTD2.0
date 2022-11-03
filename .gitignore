@@ -11,3 +11,4 @@ node_modules/.bin/prettier
 .gitignore
 .eslint*
 .git*
+.DS_Store
