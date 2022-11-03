@@ -1,0 +1,16 @@
+{
+  "name": "phonebook-app",
+  "version": "1.0.0",
+  "description": "phonebook app with graph-ql server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.10.3",
+    "graphql": "^16.6.0",
+    "uuid": "^9.0.0"
+  }
+}

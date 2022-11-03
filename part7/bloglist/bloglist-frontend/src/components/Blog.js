@@ -51,7 +51,7 @@ const BlogCard = ({ blog, username }) => {
             <IconButton aria-label="" onClick={() => dispatch(addLike(blog))} sx={{ alignItems:'right' }}>
               <FavoriteIcon />
             </IconButton>
-            <Box>
+            <Box >
               {blog.user.username === username ? <IconButton onClick={() => deleteHandler(blog.id)}><DeleteOutlineIcon/></IconButton> : <br/>}
             </Box>
           </Box>
