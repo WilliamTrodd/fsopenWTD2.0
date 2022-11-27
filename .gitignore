@@ -12,3 +12,4 @@ node_modules/.bin/prettier
 .eslint*
 .git*
 .DS_Store
+node_modules

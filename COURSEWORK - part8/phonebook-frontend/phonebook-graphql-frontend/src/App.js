@@ -25,7 +25,7 @@ const App = () => {
   return(
     <>
     <Notify errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
-    <div className="flex flex-row justify-around items-center">
+    <div className="flex flex-row justify-around items-start my-10">
       <Persons persons={result.data.allPersons} />
       <PersonForm setError = {notify}/>
       <EditNumber setError = {notify}/>
