@@ -1,20 +1,31 @@
 import { useState } from "react"
 import FormEntry from "./FormEntry"
 import { useMutation } from "@apollo/client"
-import {ADD_BOOK, ALL_AUTHORS, ALL_BOOKS} from "../queries"
+import {ADD_BOOK, All_AUTHORS, ALL_BOOKS} from "../queries"
 
-const BookForm = () => {
+const BookForm = ({setError}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [yearPub, setYearPub] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [createBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{query: ALL_BOOKS}, {query: ALL_AUTHORS}]
-    /*onError: (error) => {
+
+  const [addBook] = useMutation(ADD_BOOK, {
+    onError: (error) => {
+      console.log(error)
       setError(error.graphQLErrors[0].message)
-    }*/
+    },
+    update: (cache, response) => {
+      console.log(response)
+      cache.updateQuery({query: ALL_BOOKS}, ({allBooks}) => {
+        console.log(cache)
+        console.log(allBooks)
+        return {
+          allBooks: allBooks.concat(response.data.addBook)
+        }
+      })
+    }
   })
 
   const addGenre = () => {
@@ -28,7 +39,7 @@ const BookForm = () => {
     event.preventDefault()
 
     const published = parseInt(yearPub)
-    createBook({variables: {title, author, published, genres}})
+    addBook({variables: {title, author, published, genres}})
     
     setTitle('')
     setAuthor('')

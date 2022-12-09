@@ -10,7 +10,7 @@ query {
 }`
 
 export const CREATE_PERSON = gql`
-mutation createPerson($name: String!, $phone: String!, $street: String!, $city: String!){
+mutation createPerson($name: String!, $phone: String, $street: String!, $city: String!){
   addPerson(
     name: $name,
     phone: $phone,

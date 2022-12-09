@@ -25,7 +25,7 @@ const LoginForm = ({ setError, setToken }) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    login({ variable: {username, password}})
+    login({ variables: {username, password}})
   }
 
   return(
@@ -45,7 +45,7 @@ const LoginForm = ({ setError, setToken }) => {
     ">
       <form onSubmit={submit}>
         <FormEntry value={username} placeholder="Username" stateHandler={setUsername} />
-        <FormEntry value={password} placeholder="Password" stateHandler={setPassword} />
+        <FormEntry type="password" value={password} placeholder="Password" stateHandler={setPassword} />
         <button type="submit" className="flex mx-auto rounded-lg p-2 bg-blue-400">Login</button>  
       </form>
     </div>

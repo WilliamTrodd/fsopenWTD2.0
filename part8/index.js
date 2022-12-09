@@ -1,5 +1,4 @@
 const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server')
-const {v1: uuid} = require('uuid')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const mongoose = require('mongoose')
@@ -89,15 +88,15 @@ const resolvers = {
   },
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
-    authorCount: async () => await Author.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       if(args.author) {
-        const author = await Author.find({name: args.author})
-        return Book.find({author: author.id})
+        const author = Author.find({name: args.author})
+        return Book.find({author: author.id}).populate('author')
       } else if(args.genre) {
-        return Book.find({genres: args.genre})
+        return Book.find({genres: args.genre}).populate('author')
       }
-      return Book.find({})
+      return Book.find({}).populate('author')
     },
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => {
@@ -106,14 +105,15 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, context) => {
-      const foundAuthor = await Author.findOne({name:args.author})
+      let foundAuthor = await Author.findOne({name:args.author})
       const currentUser = context.currentUser
       if(!currentUser) {
         throw new AuthenticationError('not authenticated')
       }
       if(!foundAuthor){
         try{
-          const foundAuthor= new Author({name: args.author})
+          foundAuthor= new Author({name: args.author})
+          console.log(foundAuthor)
           await foundAuthor.save()
         } catch(e) {
           throw new UserInputError(e.message, {

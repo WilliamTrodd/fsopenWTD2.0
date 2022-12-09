@@ -106,16 +106,15 @@ const resolvers = {
   Query: {
     personCount: () => async () => Person.collection.countDocuments(),
     allPersons: async (root, args) => {
-
       if(!args.phone){
         return Person.find({})
       }
-
       return Person.find({ phone: {$exists: args.phone === 'YES'}})
     },
     findPerson: async (root, args) =>
       Person.findOne({name: args.name}),
     me: (root, args, context) => {
+      console.log(context)
       return context.currentUser
     }
   },
@@ -210,6 +209,7 @@ const server = new ApolloServer({
   resolvers,
   context: async ({req}) => {
     const auth = req ? req.headers.authorization : null
+    console.log(auth)
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(
         auth.substring(7), JWT_SECRET
