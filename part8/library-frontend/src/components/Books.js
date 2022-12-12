@@ -1,14 +1,9 @@
-const Books = ({books, genre, setGenre}) => {
-
-  //const genres = books.reduce()
-  
+const Books = ({books, genres, selectedGenre, setGenre}) => {
   const getGenre = (event) => {
     var value = event.target.value;
     setGenre(value);
   }
-
   const Selector = ({values, changeHandler, selected}) => {
-    console.log(selected)
     return(
       <select onChange={changeHandler} defaultValue={selected}>
         <option key={"allBooks"} value="">All Books</option>
@@ -24,7 +19,7 @@ const Books = ({books, genre, setGenre}) => {
   return (
   <div className="">
     <div className="text-2xl p-4 text-center">
-      {setGenre ? <Selector values={["Sci-Fi", "Fantasy", "Spy"]} changeHandler={getGenre} selected={genre} /> : <h1>{genre}</h1>}
+      {setGenre ? <Selector values={genres} changeHandler={getGenre} selected={selectedGenre} /> : <h1>{selectedGenre}</h1>}
     </div>
   <table className="table-fixed w-3/5 mx-auto">
     <thead className="bg-slate-200">
