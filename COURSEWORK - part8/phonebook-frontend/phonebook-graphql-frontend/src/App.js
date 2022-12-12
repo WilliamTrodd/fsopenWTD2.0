@@ -1,11 +1,28 @@
 import {useState} from 'react'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useQuery, useApolloClient, useSubscription } from '@apollo/client'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import EditNumber from './components/EditNumber'
 import LoginForm from './components/LoginForm'
 import Notify from "./components/Notify"
-import { ALL_PERSONS } from "./queries"
+import { ALL_PERSONS, PERSON_ADDED } from "./queries"
+
+export const updateCache = (cache, query, addedPerson) => {
+  // helper used to elimate saving same person twice
+  const uniqByName = (a) => {
+    let seen = new Set()
+    return a.filter((item) => {
+      let k = item.name
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query, ({ allPersons }) => {
+    return {
+      allPersons: uniqByName(allPersons.concat(addedPerson)),
+    }
+  })
+}
 
 
 const App = () => {
@@ -15,14 +32,22 @@ const App = () => {
   const client = useApolloClient()
 
 
-  if (result.loading) {
-    return <div className="flex w-full">loading...</div>
-  }
+  useSubscription(PERSON_ADDED, {
+    onData: ({ data }) => {
+      const addedPerson = data.data.personAdded
+      notify(`${addedPerson.name} added`)
+      updateCache(client.cache, {query: ALL_PERSONS }, addedPerson)
+    },
+  })
 
   const logout = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+  }
+
+  if (result.loading) {
+    return <div className="flex w-full">loading...</div>
   }
 
   const notify = (message) => {
