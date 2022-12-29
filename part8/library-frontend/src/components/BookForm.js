@@ -1,7 +1,8 @@
 import { useState } from "react"
 import FormEntry from "./FormEntry"
 import { useMutation } from "@apollo/client"
-import {ADD_BOOK, ALL_AUTHORS, ALL_BOOKS} from "../queries"
+import { ADD_BOOK } from "../queries"
+//import { updateCache  } from "../App"
 
 const BookForm = ({setError}) => {
   const [title, setTitle] = useState('')
@@ -13,21 +14,10 @@ const BookForm = ({setError}) => {
 
   const [addBook] = useMutation(ADD_BOOK, {
     onError: (error) => {
-      console.log(error)
+      console.log(error.graphQLErrors)
       setError(error.graphQLErrors[0].message)
     },
-    update: (cache, response) => {
-      console.log(cache)
-      console.log(response)
-      cache.updateQuery({query: ALL_BOOKS}, ({allBooks}) => {
-        const newBooks = allBooks.concat(response.data.addBook)
-        console.log(newBooks)
-        return {
-          allBooks: newBooks
-        }
-      })
-    },
-    
+
   })
 
   const addGenre = () => {
