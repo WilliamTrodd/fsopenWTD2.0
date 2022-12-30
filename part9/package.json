@@ -1,0 +1,17 @@
+{
+  "name": "part9",
+  "version": "1.0.0",
+  "description": "directory for exercises 9.1-9.7",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts-node": "ts-node",
+    "bmi": "ts-node bmiCalculator.ts",
+    "exercise": "ts-node exerciseCalculator.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.18"
+  }
+}
