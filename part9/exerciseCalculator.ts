@@ -3,7 +3,7 @@ interface exerciseVals {
   target: number;
 }
 
-interface Result {
+export interface Result {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -13,11 +13,11 @@ interface Result {
   average: number;
 }
 
-const parseExercise = (args: Array<string>): exerciseVals => {
+export const parseExercise = (args: Array<string>): exerciseVals => {
   if (args.length < 4) throw new Error("Not enough args");
 
   const hours: number[] = args.slice(3).map((h) => Number(h));
-  const target: number = Number(args[2]);
+  const target = Number(args[2]);
 
   if (hours.includes(NaN) || isNaN(target)) {
     throw new Error("Provided values were not numbers");
@@ -29,12 +29,12 @@ const parseExercise = (args: Array<string>): exerciseVals => {
   }
 };
 
-const calculateExercises = (dailyHours: number[], target: number): Result => {
+export const calculateExercises = (dailyHours: number[], target: number): Result => {
   const total: number = dailyHours.length;
   const trained: number = dailyHours.filter((h) => h > 0).length;
   const avg: number = dailyHours.reduce((s, d) => s + d, 0) / total;
 
-  let rating: number = 1;
+  let rating = 1;
 
   if (avg - target < -2) {
     rating = 3;
@@ -44,17 +44,17 @@ const calculateExercises = (dailyHours: number[], target: number): Result => {
 
   let desc: string;
   switch (rating) {
-    case 1:
-      desc = "Great job";
-      break;
-    case 2:
-      desc = "not too bad but could be better";
-      break;
-    case 3:
-      desc = "oof let's get those numbers up";
-      break;
-    default:
-      throw new Error("Rating is not 1 2 or 3.");
+  case 1:
+    desc = "Great job";
+    break;
+  case 2:
+    desc = "not too bad but could be better";
+    break;
+  case 3:
+    desc = "oof let's get those numbers up";
+    break;
+  default:
+    throw new Error("Rating is not 1 2 or 3.");
   }
 
   return {

@@ -13,3 +13,8 @@ node_modules/.bin/prettier
 .git*
 .DS_Store
 node_modules
+part4/.DS_Store
+part4/blogs-backend/.DS_Store
+part5/.DS_Store
+part5/blogs-backend/.DS_Store
+.DS_Store
