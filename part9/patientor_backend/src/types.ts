@@ -6,7 +6,7 @@ export enum Gender {
 }
 
 export enum EntryType {
-  Hospital = 'Hospital',
+  Hospital='Hospital',
   Health='HealthCheck',
   Occupational='OccupationalHealthcare'
 }
@@ -75,4 +75,6 @@ export interface Patient {
 export type NonSensitiveData = Omit<Patient, 'ssn'>;
 export type NewPatient = Omit<Patient, 'id'>;
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
-export type NewEntry = Omit<Entry, 'id'>;
+
+type EntryOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+export type NewEntry = EntryOmit<Entry, 'id'>;

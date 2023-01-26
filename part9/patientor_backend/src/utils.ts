@@ -1,6 +1,5 @@
 import {
-  NewPatient, Gender, Entry, NewEntry, EntryType,
-  Discharge, Diagnoses, HealthCheckRating, SickLeave,
+  Gender, NewEntry, Entry, NewPatient, EntryType, SickLeave, Discharge, HealthCheckRating, Diagnoses,
 } from './types';
 
 // type guards
@@ -66,42 +65,38 @@ export const toNewPatient = ({
   return newPatient;
 };
 
-type BaseEntryFields = {
-  description: unknown,
-  date: unknown,
-  specialist: unknown,
-  diagnosisCodes: unknown
-  type: unknown,
-};
+interface BaseEntryFields {
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes?: unknown;
+}
 
 interface HospitalFields extends BaseEntryFields {
-  discharge: unknown
+  type: unknown;
+  discharge?: unknown;
 }
 interface OccupationalFields extends BaseEntryFields {
-  employerName: unknown,
-  sickLeave: unknown
+  type: unknown;
+  employerName: unknown;
+  sickLeave?: unknown;
 }
 
 interface HealthCheckFields extends BaseEntryFields {
-  healthCheckRating: unknown
+  type: unknown;
+  healthCheckRating: unknown;
 }
-
-type EntryFields =
-  | HospitalFields
-  | OccupationalFields
-  | HealthCheckFields;
-
+/*
+type EntryFields = HospitalFields | OccupationalFields | HealthCheckFields;
+*/
 const isEntryType = (param: any): param is EntryType => Object.values(EntryType).includes(param);
+
 const isCodes = (codes: any): codes is Array<Diagnoses['code']> => {
-  if (!Array.isArray(codes)) {
-    return false;
-  }
-  if (codes.some((e) => typeof e !== 'string')) {
+  if (!codes || codes.some((e: any) => typeof e !== 'string')) {
     return false;
   }
   return true;
 };
-
 const isDisc = (disc: any): disc is Discharge => {
   const date = 'date' in disc;
   const criteria = 'criteria' in disc;
@@ -145,9 +140,6 @@ const parseSpecialist = (spec: unknown): string => {
 };
 
 const parseDiagnosesCodes = (codes: unknown): Array<Diagnoses['code']> => {
-  if (!codes) {
-    return [];
-  }
   if (!isCodes(codes)) {
     throw new Error(`Incorrect or missing codes ${codes}`);
   }
@@ -175,85 +167,98 @@ const parseEmployerName = (name: unknown): string => {
   return name;
 };
 
-const parseSickLeave = (object: unknown): SickLeave | undefined => {
-  if (!object) {
-    return undefined;
-  }
-  if (!isSickLeave(object)) {
+const parseSickLeave = (object: unknown): SickLeave => {
+  if (!object || !isSickLeave(object)) {
     throw new Error(`Incorrect or missing sick leave: ${object}`);
   }
   return object;
 };
-
-const toHospitalEntry = ({
-  description,
-  date,
-  specialist,
-  diagnosisCodes,
-  type,
-  discharge,
-}: HospitalFields) : NewEntry => {
+/*
+const toHealthEntry = (fields: HealthCheckFields) : NewEntry => {
   const newEntry = {
-    description: parseDescription(description),
-    date: parseDate(date),
-    specialist: parseSpecialist(specialist),
-    diagnosisCodes: parseDiagnosesCodes(diagnosisCodes),
-    type: parseEntryType(type),
-    discharge: parseDischarge(discharge),
+    description: parseDescription(fields.description),
+    date: parseDate(fields.date),
+    specialist: parseSpecialist(fields.specialist),
+    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
+    type: parseEntryType(fields.type),
+    healthCheckRating: parseHealthCheckRating(fields.healthCheckRating),
   };
   return newEntry;
 };
 
-const toHealthEntry = ({
-  description,
-  date,
-  specialist,
-  diagnosisCodes,
-  type,
-  healthCheckRating,
-}: HealthCheckFields) : NewEntry => {
-  const newEntry = {
-    description: parseDescription(description),
-    date: parseDate(date),
-    specialist: parseSpecialist(specialist),
-    diagnosisCodes: parseDiagnosesCodes(diagnosisCodes),
-    type: parseEntryType(type),
-    healthCheckRating: parseHealthCheckRating(healthCheckRating),
+const toOccEntry = (fields: OccupationalFields): NewEntry => {
+  let newEntry: NewEntry = {
+    description: parseDescription(fields.description),
+    date: parseDate(fields.date),
+    specialist: parseSpecialist(fields.specialist),
+    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
+    type: parseEntryType(fields.type),
+    employerName: parseEmployerName(fields.employerName),
   };
+  if (fields.sickLeave) {
+    newEntry = { ...newEntry, sickLeave: parseSickLeave(fields.sickLeave) };
+  }
+  return newEntry;
+};
+*/
+const toHospitalEntry = (fields: HospitalFields): NewEntry => {
+  let newEntry: NewEntry = {
+    description: parseDescription(fields.description),
+    date: parseDate(fields.date),
+    specialist: parseSpecialist(fields.specialist),
+    type: 'Hospital',
+  };
+  if (fields.discharge) {
+    newEntry = { ...newEntry, discharge: parseDischarge(fields.discharge) };
+  }
+  if (fields.diagnosisCodes) {
+    newEntry = { ...newEntry, diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes) };
+  }
   return newEntry;
 };
 
-const toOccEntry = ({
-  description,
-  date,
-  specialist,
-  diagnosisCodes,
-  type,
-  employerName,
-  sickLeave,
-}: OccupationalFields): NewEntry => {
-  const newEntry = {
-    description: parseDescription(description),
-    date: parseDate(date),
-    specialist: parseSpecialist(specialist),
-    diagnosisCodes: parseDiagnosesCodes(diagnosisCodes),
-    type: parseEntryType(type),
-    employerName: parseEmployerName(employerName),
-    sickLeave: parseSickLeave(sickLeave),
+const toHealthEntry = (fields: HealthCheckFields): NewEntry => {
+  let newEntry: NewEntry = {
+    description: parseDescription(fields.description),
+    date: parseDate(fields.date),
+    specialist: parseSpecialist(fields.specialist),
+    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
+    type: 'HealthCheck',
+    healthCheckRating: parseHealthCheckRating(fields.healthCheckRating),
   };
+  if (fields.diagnosisCodes) {
+    newEntry = { ...newEntry, diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes) };
+  }
+  return newEntry;
+};
+const toOccEntry = (fields: OccupationalFields): NewEntry => {
+  let newEntry: NewEntry = {
+    description: parseDescription(fields.description),
+    date: parseDate(fields.date),
+    specialist: parseSpecialist(fields.specialist),
+    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
+    type: 'OccupationalHealthcare',
+    employerName: parseEmployerName(fields.employerName),
+  };
+  if (fields.sickLeave) {
+    newEntry = { ...newEntry, sickLeave: parseSickLeave(fields.sickLeave) };
+  }
+  if (fields.diagnosisCodes) {
+    newEntry = { ...newEntry, diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes) };
+  }
   return newEntry;
 };
 
-export const toNewEntry = (entry: EntryFields): NewEntry => {
+export const toNewEntry = (entry: any): NewEntry => {
   const entryType = parseEntryType(entry.type);
   switch (entryType) {
     case 'Hospital':
-      return toHospitalEntry(entry as HospitalFields);
+      return toHospitalEntry(entry);
     case 'HealthCheck':
-      return toHealthEntry(entry as HealthCheckFields);
+      return toHealthEntry(entry);
     case 'OccupationalHealthcare':
-      return toOccEntry(entry as OccupationalFields);
+      return toOccEntry(entry);
     default:
-      throw new Error(`Entry: ${entry} could not be added`);
+      throw new Error('Something went wrong..');
   }
 };

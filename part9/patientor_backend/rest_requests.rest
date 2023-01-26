@@ -45,6 +45,5 @@ Content-Type: application/json
   "description":"test the occ",
   "date":"12/01/2020",
   "specialist":"TESTING OCC",
-  "type": "OccupationalHealthcare",
-  "employerName": "TEST"
+  "type": "OccupationalHealthcare"
 }
