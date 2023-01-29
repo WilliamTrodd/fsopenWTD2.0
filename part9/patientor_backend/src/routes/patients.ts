@@ -36,6 +36,7 @@ router.post('/:id/entries', (req, res) => {
       res.json(updated);
     }
   } catch (e) {
+    console.log(e);
     res.status(403).send(e);
   }
 });

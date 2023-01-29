@@ -1,5 +1,6 @@
 import {
-  Gender, NewEntry, Entry, NewPatient, EntryType, SickLeave, Discharge, HealthCheckRating, Diagnoses,
+  Gender,
+  NewEntry, Entry, NewPatient, EntryType, SickLeave, Discharge, HealthCheckRating, Diagnoses,
 } from './types';
 
 // type guards
@@ -75,11 +76,13 @@ interface BaseEntryFields {
 interface HospitalFields extends BaseEntryFields {
   type: unknown;
   discharge?: unknown;
+  discComment?: unknown;
 }
 interface OccupationalFields extends BaseEntryFields {
   type: unknown;
   employerName: unknown;
-  sickLeave?: unknown;
+  sickLeaveStart?: unknown;
+  sickLeaveEnd?: unknown;
 }
 
 interface HealthCheckFields extends BaseEntryFields {
@@ -105,6 +108,7 @@ const isDisc = (disc: any): disc is Discharge => {
 const isRating = (param: any): param is HealthCheckRating => (
   Object.values(HealthCheckRating).includes(param)
 );
+
 const isSickLeave = (object: any): object is SickLeave => {
   const { startDate } = object;
   const { endDate } = object;
@@ -154,7 +158,7 @@ const parseDischarge = (disc: unknown): Discharge => {
 };
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || !isRating(rating)) {
+  if ((!rating && rating !== 0) || !isRating(rating)) {
     throw new Error(`Incorrect or missing rating: ${rating}`);
   }
   return rating;
@@ -173,34 +177,7 @@ const parseSickLeave = (object: unknown): SickLeave => {
   }
   return object;
 };
-/*
-const toHealthEntry = (fields: HealthCheckFields) : NewEntry => {
-  const newEntry = {
-    description: parseDescription(fields.description),
-    date: parseDate(fields.date),
-    specialist: parseSpecialist(fields.specialist),
-    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
-    type: parseEntryType(fields.type),
-    healthCheckRating: parseHealthCheckRating(fields.healthCheckRating),
-  };
-  return newEntry;
-};
 
-const toOccEntry = (fields: OccupationalFields): NewEntry => {
-  let newEntry: NewEntry = {
-    description: parseDescription(fields.description),
-    date: parseDate(fields.date),
-    specialist: parseSpecialist(fields.specialist),
-    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
-    type: parseEntryType(fields.type),
-    employerName: parseEmployerName(fields.employerName),
-  };
-  if (fields.sickLeave) {
-    newEntry = { ...newEntry, sickLeave: parseSickLeave(fields.sickLeave) };
-  }
-  return newEntry;
-};
-*/
 const toHospitalEntry = (fields: HospitalFields): NewEntry => {
   let newEntry: NewEntry = {
     description: parseDescription(fields.description),
@@ -209,7 +186,13 @@ const toHospitalEntry = (fields: HospitalFields): NewEntry => {
     type: 'Hospital',
   };
   if (fields.discharge) {
-    newEntry = { ...newEntry, discharge: parseDischarge(fields.discharge) };
+    newEntry = {
+      ...newEntry,
+      discharge: parseDischarge({
+        date: fields.discharge,
+        criteria: fields.discComment,
+      }),
+    };
   }
   if (fields.diagnosisCodes) {
     newEntry = { ...newEntry, diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes) };
@@ -222,7 +205,6 @@ const toHealthEntry = (fields: HealthCheckFields): NewEntry => {
     description: parseDescription(fields.description),
     date: parseDate(fields.date),
     specialist: parseSpecialist(fields.specialist),
-    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
     type: 'HealthCheck',
     healthCheckRating: parseHealthCheckRating(fields.healthCheckRating),
   };
@@ -236,12 +218,16 @@ const toOccEntry = (fields: OccupationalFields): NewEntry => {
     description: parseDescription(fields.description),
     date: parseDate(fields.date),
     specialist: parseSpecialist(fields.specialist),
-    diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes),
     type: 'OccupationalHealthcare',
     employerName: parseEmployerName(fields.employerName),
   };
-  if (fields.sickLeave) {
-    newEntry = { ...newEntry, sickLeave: parseSickLeave(fields.sickLeave) };
+  if (fields.sickLeaveStart) {
+    newEntry = {
+      ...newEntry,
+      sickLeave: parseSickLeave(
+        { startDate: fields.sickLeaveStart, endDate: fields.sickLeaveEnd },
+      ),
+    };
   }
   if (fields.diagnosisCodes) {
     newEntry = { ...newEntry, diagnosisCodes: parseDiagnosesCodes(fields.diagnosisCodes) };
